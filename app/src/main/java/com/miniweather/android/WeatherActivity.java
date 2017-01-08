@@ -1,5 +1,6 @@
 package com.miniweather.android;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.miniweather.android.gson.Forecast;
 import com.miniweather.android.gson.Weather;
+import com.miniweather.android.service.AutoUpdateService;
 import com.miniweather.android.utils.HttpUtil;
 import com.miniweather.android.utils.Utility;
 
@@ -152,6 +154,8 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather",responseText);
                             editor.apply();
                             showWeatherInfo(weather);
+                            startAutoUpdate();
+
                         }else{
                             Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_SHORT).show();
                         }
@@ -228,5 +232,14 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    /**
+     * 开启自动更新天气
+     */
+    private void startAutoUpdate(){
+
+        Intent intent=new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 }
